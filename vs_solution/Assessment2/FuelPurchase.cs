@@ -72,7 +72,7 @@ namespace Assessment2
         /// <returns></returns>
         public static string AddPurchaseFuel(Vehicle vehicle, double odometer, double quantity, double price)
         {
-            if (vehicle.TankCapacity < quantity)
+            if (vehicle.Tank < quantity)
             {
                 return "Quantity is higher than tank capacity";
             }

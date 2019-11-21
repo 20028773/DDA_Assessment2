@@ -31,7 +31,7 @@ namespace Assessment2
             {
                 lvVehicleList.ItemsSource = Vehicle.vehicleList.Where(x => x.Manufacturer.ToUpper().Contains(txtFilter.Text.ToUpper())
                                                                         || x.Model.ToUpper().Contains(txtFilter.Text.ToUpper())
-                                                                        || x.RegistrationNumber.ToUpper().Contains(txtFilter.Text.ToUpper()));
+                                                                        || x.Registration.ToUpper().Contains(txtFilter.Text.ToUpper()));
             }
 
             lvVehicleList.Items.Refresh();

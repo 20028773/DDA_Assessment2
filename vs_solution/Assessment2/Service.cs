@@ -40,7 +40,7 @@ namespace Assessment2
         /// <param name="vehicleId"></param>
         public Service(int vehicleId)
         {
-            double odometer = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(f => f.OdometerReading).FirstOrDefault();
+            double odometer = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(f => f.Odometer).FirstOrDefault();
 
             this.vehicleId = vehicleId;
             lastServiceOdometerKm = odometer;
@@ -54,7 +54,7 @@ namespace Assessment2
         /// <returns></returns>
         public static double GetKmSinceLastService(Vehicle v)
         {
-            return (v.OdometerReading - serviceList.Where(x => x.vehicleId == v.Id).LastOrDefault().lastServiceOdometerKm);
+            return (v.Odometer - serviceList.Where(x => x.vehicleId == v.Id).LastOrDefault().lastServiceOdometerKm);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Assessment2
         {
             double nextOdoService = SERVICE_KILOMETER_LIMIT;
 
-            double actualOdo = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(x => x.OdometerReading).FirstOrDefault();
+            double actualOdo = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(x => x.Odometer).FirstOrDefault();
 
             List<Service> sList = serviceList.Where(x => x.vehicleId == vehicleId).ToList();
 

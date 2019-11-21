@@ -37,6 +37,12 @@ namespace Assessment2
         /// <returns></returns>
         public static List<T> Load<T>()
         {
+            //if (typeof(T).Name == "Vehicle")
+            //{
+            //    List<T> l = Sql.Load<Vehicle>(new Vehicle());
+            //    //return 
+            //}
+            
             //// deserialize JSON directly from a file
             List<T> loadList = new List<T>();            
             string sFile = GetFileNamePath(typeof(T).Name);

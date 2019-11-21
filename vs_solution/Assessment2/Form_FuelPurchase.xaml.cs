@@ -17,7 +17,7 @@ namespace Assessment2
             InitializeComponent();
 
             txtVehicle.Text = v.vehicleDescription;
-            txtOdometer.Text = v.OdometerReading.ToString();
+            txtOdometer.Text = v.Odometer.ToString();
             vehicle = v;
         }
         /// <summary>

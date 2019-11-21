@@ -178,7 +178,7 @@ namespace Assessment2
             {
                 list = list.Where(x => x.Manufacturer.ToUpper().Contains(sFilter.ToUpper())
                                     || x.Model.ToUpper().Contains(sFilter.ToUpper())
-                                    || x.RegistrationNumber.ToUpper().Contains(sFilter.ToUpper())).ToList();
+                                    || x.Registration.ToUpper().Contains(sFilter.ToUpper())).ToList();
             }
 
             return list;

@@ -18,10 +18,10 @@ namespace Assessment2
 
             txtManufacturer.Text = v.Manufacturer;
             txtModel.Text = v.Model;
-            txtRegistration.Text = v.RegistrationNumber;
-            txtYear.Text = v.MakeYear.ToString();
-            txtOdometer.Text = v.OdometerReading.ToString();
-            txtTank.Text = v.TankCapacity.ToString();
+            txtRegistration.Text = v.Registration;
+            txtYear.Text = v.Year.ToString();
+            txtOdometer.Text = v.Odometer.ToString();
+            txtTank.Text = v.Tank.ToString();
 
             lvRentHistory.ItemsSource = Rental.rentalList.Where(x => x.vehicleId == v.Id && x.totalPrice > 0);
             lvRentHistory.Items.Refresh();

@@ -19,10 +19,10 @@ namespace Assessment2
         public int Id { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
-        public int MakeYear { get; set; }
-        public string RegistrationNumber { get; set; }
-        public double OdometerReading { get; set; }
-        public double TankCapacity { get; set; }
+        public int Year { get; set; }
+        public string Registration { get; set; }
+        public double Odometer { get; set; }
+        public double Tank { get; set; }
         public DateTime ModifiedDate { get; set; }
         /// <summary>
         /// RETURN VEHICLE DESCRIPTION
@@ -103,7 +103,8 @@ namespace Assessment2
         /// <summary>
         /// MAIN VEHICLE LIST - GET IT FROM THE FILE
         /// </summary>
-        private static List<Vehicle> _vehicleList { get { return JsonData.Load<Vehicle>(); } }
+        private static List<Vehicle> _vehicleList { get { return Sql.Load<Vehicle>(new Vehicle()); } }
+        //private static List<Vehicle> _vehicleList { get { return JsonData.Load<Vehicle>(); } }
         /// <summary>
         /// MAIN VEHICLE LIST - PUBLIC
         /// </summary>
@@ -129,10 +130,10 @@ namespace Assessment2
             Id = id;
             Manufacturer = manufacturer;
             Model = model;
-            MakeYear = makeYear;
-            RegistrationNumber = registrationNumber;
-            OdometerReading = odometerReading;
-            TankCapacity = tankCapacity;
+            Year = makeYear;
+            Registration = registrationNumber;
+            Odometer = odometerReading;
+            Tank = tankCapacity;
             ModifiedDate = DateTime.Now;
         }
         /// <summary>
@@ -152,9 +153,10 @@ namespace Assessment2
 
             vehicleList.Add(new Vehicle(vId, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity));
 
-            JsonData.Save(vehicleList);
+            //JsonData.Save(vehicleList);
+            Sql.Save(vehicleList);
 
-            Service.recordService(vId);
+            //Service.recordService(vId);
         }
         /// <summary>
         /// UPDATE THE VEHICLE'S INFORMATION
@@ -174,10 +176,10 @@ namespace Assessment2
 
             v.Manufacturer = manufacturer;
             v.Model = model;
-            v.MakeYear = makeYear;
-            v.RegistrationNumber = registrationNumber;
-            v.OdometerReading = odometerReading;
-            v.TankCapacity = tankCapacity;
+            v.Year = makeYear;
+            v.Registration = registrationNumber;
+            v.Odometer = odometerReading;
+            v.Tank = tankCapacity;
             v.ModifiedDate = DateTime.Now;
 
             vehicleList.ToArray().SetValue(v, 0);
@@ -196,18 +198,18 @@ namespace Assessment2
 
             Vehicle v = vehicleList.Where(x => x.Id == vehicleId).FirstOrDefault();
 
-            if (newOdometerReading < v.OdometerReading)
+            if (newOdometerReading < v.Odometer)
             {
                 return "New Odometer is lower than actual";
             }
 
-            v.OdometerReading = newOdometerReading;
+            v.Odometer = newOdometerReading;
             v.ModifiedDate = DateTime.Now;
 
             vehicleList.ToArray().SetValue(v, 0);
 
             JsonData.Save(vehicleList);
-
+            
             return "";
         }
         /// <summary>
@@ -229,9 +231,9 @@ namespace Assessment2
         public static string printDetails(Vehicle v)
         {
             StringBuilder sAux2 = new StringBuilder();
-            sAux2.AppendFormat("Vehicle: {0} {1} {2}", v.Manufacturer, v.Model, v.MakeYear);
+            sAux2.AppendFormat("Vehicle: {0} {1} {2}", v.Manufacturer, v.Model, v.Year);
             sAux2.AppendLine();
-            sAux2.AppendFormat("Registration No: {0}", v.RegistrationNumber);
+            sAux2.AppendFormat("Registration No: {0}", v.Registration);
             sAux2.AppendLine();
             sAux2.AppendFormat("Total services: {0}", new Service().GetServiceCount(v.Id));
             sAux2.AppendLine();

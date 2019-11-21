@@ -45,7 +45,7 @@ namespace Assessment2
             if (lvRentVehicleList.SelectedItem != null)
             {
                 Vehicle v = (Vehicle)lvRentVehicleList.SelectedItem;
-                Form_Rental form_Rental = new Form_Rental(v.Id, v.vehicleDescription, v.OdometerReading);
+                Form_Rental form_Rental = new Form_Rental(v.Id, v.vehicleDescription, v.Odometer);
                 form_Rental.ShowDialog();
                 UpdateList();
             }

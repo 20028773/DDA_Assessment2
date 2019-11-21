@@ -42,17 +42,17 @@
                     <GridViewColumn 
                             Header="Year" 
                             Width="70" 
-                            DisplayMemberBinding="{Binding MakeYear}" />
+                            DisplayMemberBinding="{Binding Year}" />
 
                     <GridViewColumn 
                             Header="Registration" 
                             Width="100" 
-                            DisplayMemberBinding="{Binding RegistrationNumber}" />
+                            DisplayMemberBinding="{Binding Registration}" />
 
                     <GridViewColumn 
                             Header="Odometer" 
                             Width="100" 
-                            DisplayMemberBinding="{Binding OdometerReading, StringFormat='{}{0:#,##0} km'}"/>
+                            DisplayMemberBinding="{Binding Odometer, StringFormat='{}{0:#,##0} km'}"/>
 
                     <GridViewColumn 
                             Header="Status" 

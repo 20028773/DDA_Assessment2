@@ -40,10 +40,10 @@ namespace Assessment2
 
             txtManufacturer.Text = updateVehicle.Manufacturer;
             txtModel.Text = updateVehicle.Model;
-            txtYear.Text = updateVehicle.MakeYear.ToString();
-            txtRegistration.Text = updateVehicle.RegistrationNumber;
-            txtOdometer.Text = updateVehicle.OdometerReading.ToString();
-            txtTank.Text = updateVehicle.TankCapacity.ToString();
+            txtYear.Text = updateVehicle.Year.ToString();
+            txtRegistration.Text = updateVehicle.Registration;
+            txtOdometer.Text = updateVehicle.Odometer.ToString();
+            txtTank.Text = updateVehicle.Tank.ToString();
         }
         /// <summary>
         /// VALIDATE THE FORM FIELDS AND RETURN A ERROR MESSAGE IF NEEDED
