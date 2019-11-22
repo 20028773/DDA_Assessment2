@@ -83,8 +83,13 @@ namespace Assessment2
             {
                 foreach (PropertyInfo pro in temp.GetProperties())
                 {
-                    if (pro.Name == column.ColumnName)
-                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    if (pro.Name == column.ColumnName && dr[column.ColumnName] != DBNull.Value)
+                    {
+                        if (column.ColumnName == "rentType")
+                            pro.SetValue(obj, (dr[column.ColumnName].ToString() == "Day" ? 0 : 1), null);
+                        else
+                            pro.SetValue(obj, dr[column.ColumnName], null);
+                    }
                     else
                         continue;
                 }
@@ -93,10 +98,10 @@ namespace Assessment2
             return obj;
         }
 
-        public static T sqlSelect<T>(ulong id)
+        public static T sqlSelect<T>(ulong id, string field = "id")
         {
             string sql = "Select * from " + typeof(T).Name;
-            sql += " Where id = " + id.ToString();
+            sql += " Where " + field + " = " + id.ToString();
 
             return GetItem<T>(selectTable(sql).Rows[0]);
         }
@@ -119,19 +124,23 @@ namespace Assessment2
             {
                 if (item.GetCustomAttributesData().Count == 0)
                 {
-                    auxList.Add(item.Name);
-
-                    switch (item.PropertyType.Name)
+                    if (item.GetValue(classObj) != null && item.GetValue(classObj).ToString() != "0")
                     {
-                        case "String":
-                            auxList2.Add(string.Format("'{0}'", item.GetValue(classObj)));
-                            break;
-                        case "DateTime":
-                            auxList2.Add(string.Format("'{0:s}'", item.GetValue(classObj)));
-                            break;
-                        default:
-                            auxList2.Add(item.GetValue(classObj).ToString());
-                            break;
+                        auxList.Add(item.Name);
+
+                        switch (item.PropertyType.Name)
+                        {
+                            case "type":
+                            case "String":
+                                auxList2.Add(string.Format("'{0}'", item.GetValue(classObj)));
+                                break;
+                            case "DateTime":
+                                auxList2.Add(string.Format("'{0:s}'", item.GetValue(classObj)));
+                                break;
+                            default:
+                                auxList2.Add(item.GetValue(classObj).ToString());
+                                break;
+                        }
                     }
                 }
             }
@@ -163,10 +172,12 @@ namespace Assessment2
                         {
                             switch (item.PropertyType.Name)
                             {
+                                case "type":
                                 case "String":
                                     auxList.Add(string.Format("{0} = '{1}'", item.Name, item.GetValue(classObj)));
                                     break;
                                 case "DateTime":
+                                case "Nullable`1":
                                     auxList.Add(string.Format("{0} = '{1:s}'", item.Name, item.GetValue(classObj)));
                                     break;
                                 default:

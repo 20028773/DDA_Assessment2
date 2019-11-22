@@ -9,7 +9,7 @@ namespace Assessment2
     public partial class Form_Rental : Window
     {
         private ulong vehicleId;
-        private int rentalId;
+        private ulong rentalId;
         private decimal dEndOdometer;
         private DateTime? dtEndDate = null;
         /// <summary>

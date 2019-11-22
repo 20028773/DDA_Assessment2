@@ -110,6 +110,12 @@ namespace Assessment2
         /// </summary>
         [JsonIgnore]
         public static List<Vehicle> vehicleList { get { return _vehicleList; } }
+
+        public static Vehicle getVehicle(ulong id)
+        {
+            return Sql.sqlSelect<Vehicle>(id);
+        }
+
         /// <summary>
         /// CONSTRUCTOR
         /// </summary>

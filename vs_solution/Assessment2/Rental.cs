@@ -13,7 +13,7 @@ namespace Assessment2
         /// <summary>
         /// RENTAL MAIN PROPERTIES
         /// </summary>
-        public int Id { get; set; }
+        public ulong Id { get; set; }
         public ulong vehicleId { get; set; }
         public string customerName { get; set; }
         public type rentType { get; set; }
@@ -33,14 +33,14 @@ namespace Assessment2
         {
             get
             {
-                var sAux = "";
+                return Vehicle.getVehicle(vehicleId).vehicleDescription;
 
-                if (Vehicle.vehicleList != null)
-                {
-                    sAux = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(f => f.vehicleDescription).FirstOrDefault();
-                }
+                //if (Vehicle.vehicleList != null)
+                //{
+                //    sAux = Vehicle.getVehicle(vehicleId).vehicleDescription;
+                //}
 
-                return sAux;
+                //return sAux;
             }
         }
 
@@ -58,7 +58,7 @@ namespace Assessment2
         /// <summary>
         /// MAIN RENTAL LIST - GET IT FROM THE FILE
         /// </summary>
-        private static List<Rental> _rentalList { get { return JsonData.Load<Rental>(); } }
+        private static List<Rental> _rentalList { get { return Sql.sqlSelectAll<Rental>(); } }
         /// <summary>
         /// MAIN RENTAL LIST - PUBLIC
         /// </summary>
@@ -72,6 +72,12 @@ namespace Assessment2
             Day,
             KM
         }
+
+        public static Rental getRental(ulong id)
+        {
+            return Sql.sqlSelect<Rental>(id);
+        }
+
         /// <summary>
         /// CONSTRUCTOR
         /// </summary>
@@ -89,7 +95,7 @@ namespace Assessment2
         /// <param name="endDate"></param>
         /// <param name="notes"></param>
         /// <param name="totalPrice"></param>
-        public Rental(int id, ulong vehicleId, string customerName, type rentType, decimal startOdometer, decimal endOdometer, DateTime startDate, DateTime? endDate, string notes, decimal totalPrice)
+        public Rental(ulong id, ulong vehicleId, string customerName, type rentType, decimal startOdometer, decimal endOdometer, DateTime startDate, DateTime? endDate, string notes, decimal totalPrice)
         {
             this.Id = id;
             this.vehicleId = vehicleId;
@@ -113,11 +119,9 @@ namespace Assessment2
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <param name="notes"></param>
-        public static void AddRental(ulong vehicleId, string customerName, type rentType, decimal startOdometer, DateTime startDate, DateTime? endDate, string notes)
+        public static bool AddRental(ulong vehicleId, string customerName, type rentType, decimal startOdometer, DateTime startDate, DateTime? endDate, string notes)
         {
-            List<Rental> rentalList = _rentalList;
-            rentalList.Add(new Rental((rentalList.Count > 0 ? rentalList.Last().Id + 1 : 1), vehicleId, customerName, rentType, startOdometer, 0, startDate, endDate, notes, 0));
-            JsonData.Save(rentalList);
+            return Sql.sqlInsert<Rental>(new Rental(0, vehicleId, customerName, rentType, startOdometer, 0, startDate, endDate, notes, 0));
         }
         /// <summary>
         /// FINALIZE THE RENTAL
@@ -127,11 +131,9 @@ namespace Assessment2
         /// <param name="endDate"></param>
         /// <param name="notes"></param>
         /// <returns></returns>
-        public static string FinalizeRental(int rentalId, decimal endOdometer, DateTime endDate, string notes)
+        public static string FinalizeRental(ulong rentalId, decimal endOdometer, DateTime endDate, string notes)
         {
-            List<Rental> rentalList = _rentalList;
-
-            Rental r = rentalList.Where(x => x.Id == rentalId).FirstOrDefault();
+            Rental r = getRental(rentalId);
 
             string sMessage = Vehicle.UpdateOdometer(r.vehicleId, endOdometer);
 
@@ -150,9 +152,7 @@ namespace Assessment2
             r.totalPrice = totalPrice;
             r.ModifiedDate = DateTime.Now;
 
-            rentalList.ToArray().SetValue(r, 0);
-
-            JsonData.Save(rentalList);
+            Sql.sqlUpdate<Rental>(r);
 
             return "";
         }
@@ -162,7 +162,7 @@ namespace Assessment2
         /// <param name="vehicheId"></param>
         /// <returns></returns>
         public static decimal GetTotalRevenue(ulong vehicheId)
-        {
+        {            
             return rentalList.Where(x => x.vehicleId == vehicheId).Sum(t => t.totalPrice);
         }
         /// <summary>
