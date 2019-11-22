@@ -14,15 +14,15 @@ namespace Assessment2
         /// RENTAL MAIN PROPERTIES
         /// </summary>
         public int Id { get; set; }
-        public int vehicleId { get; set; }
+        public ulong vehicleId { get; set; }
         public string customerName { get; set; }
         public type rentType { get; set; }
-        public double startOdometer { get; set; }
-        public double endOdometer { get; set; }
+        public decimal startOdometer { get; set; }
+        public decimal endOdometer { get; set; }
         public DateTime startDate { get; set; }
         public DateTime? endDate { get; set; }
         public string notes { get; set; }
-        public double totalPrice { get; set; }
+        public decimal totalPrice { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Assessment2
         /// RETURN HOW MANY KM THE VEHICLE TRAVELLED
         /// </summary>
         [JsonIgnore]
-        public double travelledDistance
+        public decimal travelledDistance
         {
             get
             {
@@ -89,7 +89,7 @@ namespace Assessment2
         /// <param name="endDate"></param>
         /// <param name="notes"></param>
         /// <param name="totalPrice"></param>
-        public Rental(int id, int vehicleId, string customerName, type rentType, double startOdometer, double endOdometer, DateTime startDate, DateTime? endDate, string notes, double totalPrice)
+        public Rental(int id, ulong vehicleId, string customerName, type rentType, decimal startOdometer, decimal endOdometer, DateTime startDate, DateTime? endDate, string notes, decimal totalPrice)
         {
             this.Id = id;
             this.vehicleId = vehicleId;
@@ -113,7 +113,7 @@ namespace Assessment2
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <param name="notes"></param>
-        public static void AddRental(int vehicleId, string customerName, type rentType, double startOdometer, DateTime startDate, DateTime? endDate, string notes)
+        public static void AddRental(ulong vehicleId, string customerName, type rentType, decimal startOdometer, DateTime startDate, DateTime? endDate, string notes)
         {
             List<Rental> rentalList = _rentalList;
             rentalList.Add(new Rental((rentalList.Count > 0 ? rentalList.Last().Id + 1 : 1), vehicleId, customerName, rentType, startOdometer, 0, startDate, endDate, notes, 0));
@@ -127,7 +127,7 @@ namespace Assessment2
         /// <param name="endDate"></param>
         /// <param name="notes"></param>
         /// <returns></returns>
-        public static string FinalizeRental(int rentalId, double endOdometer, DateTime endDate, string notes)
+        public static string FinalizeRental(int rentalId, decimal endOdometer, DateTime endDate, string notes)
         {
             List<Rental> rentalList = _rentalList;
 
@@ -161,7 +161,7 @@ namespace Assessment2
         /// </summary>
         /// <param name="vehicheId"></param>
         /// <returns></returns>
-        public static double GetTotalRevenue(int vehicheId)
+        public static decimal GetTotalRevenue(ulong vehicheId)
         {
             return rentalList.Where(x => x.vehicleId == vehicheId).Sum(t => t.totalPrice);
         }

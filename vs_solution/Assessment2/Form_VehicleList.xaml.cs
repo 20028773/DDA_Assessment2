@@ -34,6 +34,7 @@ namespace Assessment2
                                                                         || x.Registration.ToUpper().Contains(txtFilter.Text.ToUpper()));
             }
 
+            //lvVehicleList.ItemsSource = Sql.selectTable("SELECT * FROM VEHICLE");
             lvVehicleList.Items.Refresh();
         }
         /// <summary>

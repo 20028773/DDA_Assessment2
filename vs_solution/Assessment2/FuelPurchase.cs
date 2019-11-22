@@ -12,11 +12,11 @@ namespace Assessment2
         /// <summary>
         /// FUEL MAIN PROPERTIES
         /// </summary>
-        public double odometerReading { get; set; }
-        public int vehicleId { get; set; }
+        public decimal odometerReading { get; set; }
+        public ulong vehicleId { get; set; }
         public DateTime purchaseDate { get; set; }
-        public double quantity { get; set; }
-        public double price { get; set; }
+        public decimal quantity { get; set; }
+        public decimal price { get; set; }
 
         /// <summary>
         /// MAIN FUEL LIST - GET IT FROM THE FILE
@@ -32,12 +32,12 @@ namespace Assessment2
         /// </summary>
         /// <param name="vehicheId"></param>
         /// <returns></returns>
-        public static double GetFuelEconomy(int vehicheId)
+        public static decimal GetFuelEconomy(ulong vehicheId)
         {
             var list = _fuelList.Where(x => x.vehicleId == vehicheId).ToList();
 
-            double totalFuel = 0.0;
-            double totalKM = 0.0;
+            decimal totalFuel = 0;
+            decimal totalKM = 0;
 
             if (list.Count > 0)
             {
@@ -54,7 +54,7 @@ namespace Assessment2
         /// <param name="odometer"></param>
         /// <param name="quantity"></param>
         /// <param name="price"></param>
-        public FuelPurchase(int vehicleId, double odometer, double quantity, double price)
+        public FuelPurchase(ulong vehicleId, decimal odometer, decimal quantity, decimal price)
         {
             this.vehicleId = vehicleId;
             this.odometerReading = odometer;
@@ -70,7 +70,7 @@ namespace Assessment2
         /// <param name="quantity"></param>
         /// <param name="price"></param>
         /// <returns></returns>
-        public static string AddPurchaseFuel(Vehicle vehicle, double odometer, double quantity, double price)
+        public static string AddPurchaseFuel(Vehicle vehicle, decimal odometer, decimal quantity, decimal price)
         {
             if (vehicle.Tank < quantity)
             {

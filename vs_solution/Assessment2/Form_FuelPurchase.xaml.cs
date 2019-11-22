@@ -27,7 +27,7 @@ namespace Assessment2
         /// <param name="e"></param>
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            string sMessage = FuelPurchase.AddPurchaseFuel(vehicle, double.Parse(txtOdometer.Text), double.Parse(txtQuantity.Text), double.Parse(txtPrice.Text));
+            string sMessage = FuelPurchase.AddPurchaseFuel(vehicle, decimal.Parse(txtOdometer.Text), decimal.Parse(txtQuantity.Text), decimal.Parse(txtPrice.Text));
 
             if (string.IsNullOrEmpty(sMessage))
             {

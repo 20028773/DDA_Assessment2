@@ -39,10 +39,12 @@
         <xctk:MaskedTextBox x:Name="txtRegistration" Grid.Column="2" Grid.Row="4" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Mask="AAAAAAAAA" />
 
         <Label x:Name="lblOdometer" Content="Odometer: " Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" />
-        <xctk:MaskedTextBox x:Name="txtOdometer" Grid.Column="2" Grid.Row="5" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Mask="9999999"/>
+        <!--<xctk:MaskedTextBox x:Name="txtOdometer" Grid.Column="2" Grid.Row="5" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Mask="9999999.99"/>-->
+        <TextBox x:Name="txtOdometer" Grid.Column="2" Grid.Row="5" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
         <Label x:Name="lblTank" Content="Tank Capacity: " Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" />
-        <xctk:MaskedTextBox x:Name="txtTank" Grid.Column="2" Grid.Row="6" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Mask="999"/>
+        <!--<xctk:MaskedTextBox x:Name="txtTank" Grid.Column="2" Grid.Row="6" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Mask="99.99"/>-->
+        <TextBox x:Name="txtTank" Grid.Column="2" Grid.Row="6" Width="200" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
         <Button x:Name="btnSave" Content="Save" Grid.Column="2" Grid.Row="7" Width="60" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,65,0" Click="BtnSave_Click"></Button>
         <Button x:Name="btnCancel" Content="Cancel" Grid.Column="2" Grid.Row="7" Width="60" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Click="BtnCancel_Click" ></Button>

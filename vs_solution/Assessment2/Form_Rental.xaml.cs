@@ -8,9 +8,9 @@ namespace Assessment2
     /// </summary>
     public partial class Form_Rental : Window
     {
-        private int vehicleId;
+        private ulong vehicleId;
         private int rentalId;
-        private double dEndOdometer;
+        private decimal dEndOdometer;
         private DateTime? dtEndDate = null;
         /// <summary>
         /// INITLIALIZE THE FORM COMPONENTS AND ADD THE RENT TYPE TO THE COMBO BOX
@@ -53,7 +53,7 @@ namespace Assessment2
         /// <summary>
         /// CONSTRUCTOR - CALLED TO CREATE A NEW RENTAL
         /// </summary>
-        public Form_Rental(int vId, string vDescription, double odometer)
+        public Form_Rental(ulong vId, string vDescription, decimal odometer)
         {
             initialize();
 
@@ -94,7 +94,7 @@ namespace Assessment2
             {
                 try
                 {
-                    dEndOdometer = double.Parse(txtEndOdometer.Text.Replace("_", ""));
+                    dEndOdometer = decimal.Parse(txtEndOdometer.Text.Replace("_", ""));
                 }
                 catch
                 {
@@ -126,7 +126,7 @@ namespace Assessment2
                 Rental.AddRental(vehicleId,
                                     txtCustomer.Text,
                                     rentaltype,
-                                    double.Parse(txtStartOdometer.Text),
+                                    decimal.Parse(txtStartOdometer.Text),
                                     DateTime.Parse(dpStartDate.Text),
                                     dtEndDate,
                                     txtNotes.Text);

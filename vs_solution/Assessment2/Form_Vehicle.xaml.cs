@@ -7,13 +7,13 @@ namespace Assessment2
     /// </summary>
     public partial class Form_Vehicle : Window
     {
-        private int id = 0;
+        private ulong id = 0;
         private string sManufacturer;
         private string sModel;
         private int nYear;
         private string sRegistration;
-        private double dOdometer;
-        private double dTank;
+        private decimal dOdometer;
+        private decimal dTank;
         /// <summary>
         /// CONSTRUCTOR - CALLED TO CREATE A NEW VEHICLE
         /// </summary>
@@ -88,7 +88,7 @@ namespace Assessment2
 
             try
             {
-                dOdometer = double.Parse(txtOdometer.Text.Replace("_", ""));
+                dOdometer = decimal.Parse(txtOdometer.Text.Replace("_", ""));
 
                 if (dOdometer < 0)
                 {
@@ -102,7 +102,7 @@ namespace Assessment2
 
             try
             {
-                dTank = double.Parse(txtTank.Text.Replace("_", ""));
+                dTank = decimal.Parse(txtTank.Text.Replace("_", ""));
 
                 if (dTank < 0)
                 {
@@ -134,6 +134,10 @@ namespace Assessment2
                 else
                 {
                     Vehicle.AddVehicle(sManufacturer, sModel, nYear, sRegistration, dOdometer, dTank);
+                    //if( !Vehicle.AddVehicle(sManufacturer, sModel, nYear, sRegistration, dOdometer, dTank))
+                    //{
+                    //    return;
+                    //}
                 }
 
                 MessageBox.Show("Vehicle " + (id != 0 ? "Edited" : "Created") + " Successfully!", "Vehicle", MessageBoxButton.OK, MessageBoxImage.Information);

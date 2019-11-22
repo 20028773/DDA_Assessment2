@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -16,13 +17,13 @@ namespace Assessment2
         /// <summary>
         /// VEHICLE MAIN PROPERTIES
         /// </summary>
-        public int Id { get; set; }
+        public ulong Id { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
         public int Year { get; set; }
         public string Registration { get; set; }
-        public double Odometer { get; set; }
-        public double Tank { get; set; }
+        public decimal Odometer { get; set; }
+        public decimal Tank { get; set; }
         public DateTime ModifiedDate { get; set; }
         /// <summary>
         /// RETURN VEHICLE DESCRIPTION
@@ -101,10 +102,9 @@ namespace Assessment2
             }
         }
         /// <summary>
-        /// MAIN VEHICLE LIST - GET IT FROM THE FILE
+        /// MAIN VEHICLE LIST - GET IT FROM THE SQL
         /// </summary>
-        private static List<Vehicle> _vehicleList { get { return Sql.Load<Vehicle>(new Vehicle()); } }
-        //private static List<Vehicle> _vehicleList { get { return JsonData.Load<Vehicle>(); } }
+        private static List<Vehicle> _vehicleList { get { return Sql.sqlSelectAll<Vehicle>(); } }
         /// <summary>
         /// MAIN VEHICLE LIST - PUBLIC
         /// </summary>
@@ -125,7 +125,7 @@ namespace Assessment2
         /// <param name="registrationNumber"></param>
         /// <param name="odometerReading"></param>
         /// <param name="tankCapacity"></param>
-        private Vehicle(int id, string manufacturer, string model, int makeYear, string registrationNumber, double odometerReading, double tankCapacity)
+        private Vehicle(ulong id, string manufacturer, string model, int makeYear, string registrationNumber, decimal odometerReading, decimal tankCapacity)
         {
             Id = id;
             Manufacturer = manufacturer;
@@ -134,6 +134,13 @@ namespace Assessment2
             Registration = registrationNumber;
             Odometer = odometerReading;
             Tank = tankCapacity;
+            ModifiedDate = DateTime.Now;
+        }
+
+        private Vehicle(ulong id, decimal odometerReading)
+        {
+            Id = id;
+            Odometer = odometerReading;
             ModifiedDate = DateTime.Now;
         }
         /// <summary>
@@ -145,17 +152,9 @@ namespace Assessment2
         /// <param name="registrationNumber"></param>
         /// <param name="odometerReading"></param>
         /// <param name="tankCapacity"></param>
-        public static void AddVehicle(string manufacturer, string model, int makeYear, string registrationNumber, double odometerReading, double tankCapacity)
+        public static bool AddVehicle(string manufacturer, string model, int makeYear, string registrationNumber, decimal odometerReading, decimal tankCapacity)
         {
-            List<Vehicle> vehicleList = _vehicleList;
-
-            var vId = (vehicleList.Count > 0 ? vehicleList.Last().Id + 1 : 1);
-
-            vehicleList.Add(new Vehicle(vId, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity));
-
-            //JsonData.Save(vehicleList);
-            Sql.Save(vehicleList);
-
+            return Sql.sqlInsert<Vehicle>(new Vehicle(0, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity));
             //Service.recordService(vId);
         }
         /// <summary>
@@ -168,23 +167,9 @@ namespace Assessment2
         /// <param name="registrationNumber"></param>
         /// <param name="odometerReading"></param>
         /// <param name="tankCapacity"></param>
-        public static void EditVehicle(int id, string manufacturer, string model, int makeYear, string registrationNumber, double odometerReading, double tankCapacity)
+        public static bool EditVehicle(ulong id, string manufacturer, string model, int makeYear, string registrationNumber, decimal odometerReading, decimal tankCapacity)
         {
-            List<Vehicle> vehicleList = _vehicleList;
-
-            Vehicle v = vehicleList.Where(x => x.Id == id).FirstOrDefault();
-
-            v.Manufacturer = manufacturer;
-            v.Model = model;
-            v.Year = makeYear;
-            v.Registration = registrationNumber;
-            v.Odometer = odometerReading;
-            v.Tank = tankCapacity;
-            v.ModifiedDate = DateTime.Now;
-
-            vehicleList.ToArray().SetValue(v, 0);
-
-            JsonData.Save(vehicleList);
+            return Sql.sqlUpdate<Vehicle>(new Vehicle(id, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity));
         }
         /// <summary>
         /// UPDATES THE VEHICLE ODOMETER
@@ -192,24 +177,17 @@ namespace Assessment2
         /// <param name="vehicleId"></param>
         /// <param name="newOdometerReading"></param>
         /// <returns></returns>
-        public static string UpdateOdometer(int vehicleId, double newOdometerReading)
+        public static string UpdateOdometer(ulong vehicleId, decimal newOdometerReading)
         {
-            List<Vehicle> vehicleList = _vehicleList;
-
-            Vehicle v = vehicleList.Where(x => x.Id == vehicleId).FirstOrDefault();
+            Vehicle v = Sql.sqlSelect<Vehicle>(vehicleId);
 
             if (newOdometerReading < v.Odometer)
             {
                 return "New Odometer is lower than actual";
             }
 
-            v.Odometer = newOdometerReading;
-            v.ModifiedDate = DateTime.Now;
+            Sql.sqlUpdate<Vehicle>(new Vehicle(vehicleId, newOdometerReading));
 
-            vehicleList.ToArray().SetValue(v, 0);
-
-            JsonData.Save(vehicleList);
-            
             return "";
         }
         /// <summary>
@@ -218,9 +196,7 @@ namespace Assessment2
         /// <param name="v"></param>
         public static void DeleteVehicle(Vehicle v)
         {
-            List<Vehicle> vehicleList = _vehicleList;
-            vehicleList.Remove(vehicleList.Where(x => x.Id == v.Id).FirstOrDefault());
-            JsonData.Save(vehicleList);
+            Sql.sqlDelete<Vehicle>(v);
         }
 
         /// <summary>
@@ -242,7 +218,7 @@ namespace Assessment2
             sAux2.AppendFormat("Kilometres since last service: {0:#,###0} km", Service.GetKmSinceLastService(v));
             sAux2.AppendLine();
 
-            double economy = FuelPurchase.GetFuelEconomy(v.Id);
+            decimal economy = FuelPurchase.GetFuelEconomy(v.Id);
 
             if (economy > 0)
             {

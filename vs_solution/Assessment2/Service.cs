@@ -13,14 +13,14 @@ namespace Assessment2
         /// <summary>
         /// CONSTANT FOR HOW MANY KM BEFORE THE CAR NEED A SERVICE
         /// </summary>
-        const double SERVICE_KILOMETER_LIMIT = 10000;
+        const decimal SERVICE_KILOMETER_LIMIT = 10000;
         /// <summary>
         /// SERVICE MAIN PROPERTIES
         /// </summary>
-        public double lastServiceOdometerKm { get; set; }
+        public decimal lastServiceOdometerKm { get; set; }
         public int serviceCount { get; set; }
         public DateTime lastServiceDate { get; set; }
-        public int vehicleId { get; set; }
+        public ulong vehicleId { get; set; }
         /// <summary>
         /// MAIN SERVICE LIST - GET IT FROM THE FILE
         /// </summary>
@@ -38,9 +38,9 @@ namespace Assessment2
         /// CONSTRUCTOR THAT SET THE SERVICE PROPERTIES
         /// </summary>
         /// <param name="vehicleId"></param>
-        public Service(int vehicleId)
+        public Service(ulong vehicleId)
         {
-            double odometer = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(f => f.Odometer).FirstOrDefault();
+            decimal odometer = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(f => f.Odometer).FirstOrDefault();
 
             this.vehicleId = vehicleId;
             lastServiceOdometerKm = odometer;
@@ -52,7 +52,7 @@ namespace Assessment2
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public static double GetKmSinceLastService(Vehicle v)
+        public static decimal GetKmSinceLastService(Vehicle v)
         {
             return (v.Odometer - serviceList.Where(x => x.vehicleId == v.Id).LastOrDefault().lastServiceOdometerKm);
         }
@@ -61,7 +61,7 @@ namespace Assessment2
         /// CREATE A NEW SERVICE TO THE VEHICLE
         /// </summary>
         /// <param name="vehicleId"></param>
-        public static void recordService(int vehicleId)
+        public static void recordService(ulong vehicleId)
         {
             List<Service> sList = serviceList;
             sList.Add(new Service(vehicleId));
@@ -74,7 +74,7 @@ namespace Assessment2
         /// </summary>
         /// <param name="vId"></param>
         /// <returns></returns>
-        public int GetServiceCount(int vId = 0)
+        public int GetServiceCount(ulong vId = 0)
         {
             var count = 0;
 
@@ -93,11 +93,11 @@ namespace Assessment2
         /// </summary>
         /// <param name="vehicleId"></param>
         /// <returns></returns>
-        public static bool isVehicleDueToService(int vehicleId)
+        public static bool isVehicleDueToService(ulong vehicleId)
         {
-            double nextOdoService = SERVICE_KILOMETER_LIMIT;
+            decimal nextOdoService = SERVICE_KILOMETER_LIMIT;
 
-            double actualOdo = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(x => x.Odometer).FirstOrDefault();
+            decimal actualOdo = Vehicle.vehicleList.Where(x => x.Id == vehicleId).Select(x => x.Odometer).FirstOrDefault();
 
             List<Service> sList = serviceList.Where(x => x.vehicleId == vehicleId).ToList();
 

@@ -1,6 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
 
 namespace Assessment2
 {
@@ -10,141 +12,40 @@ namespace Assessment2
 
         private static MySqlConnection connection;
 
-
         private static void GetConnection()
         {
             connection = new MySqlConnection(CONNECTION_STRING);
             connection.Open();
         }
 
-
         private void CloseConnection()
         {
             connection.Close();
         }
 
-        public static List<T> Load<T>(T item)
+        private static DataTable selectTable(string sql)
         {
-            string typeName = typeof(T).Name;
+            DataTable dt = new DataTable();
 
-            List<T> list = new List<T>();
-
-            string sql = "select * from " + typeName;
-
-            GetConnection();
-
-            //Type genericType = typeof(List<>);
-            //Type[] listOfTypeArgs = new[] { typeof(T) };
-            //var newObject = Activator.CreateInstance(genericType.MakeGenericType(listOfTypeArgs));
-
-            using (MySqlCommand cmdSel = new MySqlCommand(sql, connection))
+            try
             {
-                MySqlDataReader data = cmdSel.ExecuteReader();
+                GetConnection();
 
-                while (data.Read())
+                using (MySqlDataAdapter da = new MySqlDataAdapter(sql, connection))
                 {
-                    //var item3 = Activator.CreateInstance
-                    //item = default(T);
-                    foreach (var item2 in item.GetType().GetProperties())
-                    {
-                        if (item2.GetCustomAttributesData().Count == 0)
-                        {
-                            switch (item2.PropertyType.Name)
-                            {
-                                case "String":
-                                    item2.SetValue(item, data.GetString(item2.Name));
-                                    break;
-                                case "Double":
-                                    item2.SetValue(item, data.GetDouble(item2.Name));
-                                    break;
-                                case "Int32":
-                                    item2.SetValue(item, data.GetInt32(item2.Name));
-                                    break;
-                                case "DateTime":
-                                    item2.SetValue(item, data.GetDateTime(item2.Name));
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-
-                    list.Add(item);
+                    da.Fill(dt);
                 }
             }
+            catch (Exception)
+            {
 
-            return list;
+            }
+
+            return dt;
         }
 
-        public static void Save<T>(List<T> saveList)
+        private static bool sqlExecute(string sql)
         {
-            List<string> auxList = new List<string>();
-
-            string sql = "Insert into " + typeof(T).Name + " (";
-
-            foreach (var item in typeof(T).GetProperties())
-            {
-                if (item.GetCustomAttributesData().Count == 0)
-                {
-                    auxList.Add(item.Name);
-                }
-            }
-
-            sql += string.Join<string>(",", auxList) + ") VALUES ";
-
-            int count = 0;
-
-            foreach (var item in saveList)
-            {
-                auxList.Clear();
-
-                sql += count == 0 ? "( " : ", (";
-
-                foreach (var item2 in item.GetType().GetProperties())
-                {
-                    if (item2.GetCustomAttributesData().Count == 0)
-                    {
-                        switch (item2.PropertyType.Name)
-                        {
-                            case "String":
-                                auxList.Add(string.Format("'{0}'", item2.GetValue(item)));
-                                break;
-                            case "DateTime":
-                                auxList.Add(string.Format("'{0:s}'", item2.GetValue(item)));
-                                break;
-                            default:
-                                auxList.Add(item2.GetValue(item).ToString());
-                                break;
-                        }
-                    }
-                }
-
-                sql += string.Join<string>(",", auxList) + ") ";
-                count++;
-            }
-
-
-
-            //switch (typeName)
-            //{
-            //    case "Vehicle":
-            //        //item.GetType().GetProperties()[0].SetValue(item, data.GetInt32("id"));
-            //        //item.GetType().GetProperties()[1].SetValue(item, data.GetString("make"));
-            //        //item.GetType().GetProperties()[2].SetValue(item, data.GetString("model"));
-            //        //item.GetType().GetProperties()[3].SetValue(item, data.GetInt16("year"));
-            //        //item.GetType().GetProperties()[4].SetValue(item, data.GetString("registration"));
-            //        //item.GetType().GetProperties()[5].SetValue(item, data.GetDouble("odometer"));
-            //        //item.GetType().GetProperties()[6].SetValue(item, data.GetDouble("tank"));
-            //        //item.GetType().GetProperties()[7].SetValue(item, data.GetDateTime("created_at"));
-            //        break;
-
-            //    default:
-            //        break;
-            //}
-
-
-            // sql += "location_name, two_letter_code) select '" + sName + "', '" + sCode + "' ";
-
             try
             {
                 using (MySqlCommand cmdSel = new MySqlCommand(sql, connection))
@@ -154,9 +55,154 @@ namespace Assessment2
             }
             catch (Exception)
             {
-                //return false;
+                return false;
             }
 
+            return true;
+        }
+
+        private static List<T> ConvertDataTable<T>(DataTable dt)
+        {
+            List<T> data = new List<T>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                T item = GetItem<T>(row);
+                data.Add(item);
+            }
+
+            return data;
+        }
+
+        private static T GetItem<T>(DataRow dr)
+        {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
+
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in temp.GetProperties())
+                {
+                    if (pro.Name == column.ColumnName)
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    else
+                        continue;
+                }
+            }
+
+            return obj;
+        }
+
+        public static T sqlSelect<T>(ulong id)
+        {
+            string sql = "Select * from " + typeof(T).Name;
+            sql += " Where id = " + id.ToString();
+
+            return GetItem<T>(selectTable(sql).Rows[0]);
+        }
+
+        public static List<T> sqlSelectAll<T>(string filter = "")
+        {
+            string sql = "Select * from " + typeof(T).Name;
+
+            return ConvertDataTable<T>(selectTable(sql));
+        }
+
+        public static bool sqlInsert<T>(T classObj)
+        {
+            List<string> auxList = new List<string>();
+            List<string> auxList2 = new List<string>();
+
+            string sql = "Insert into " + typeof(T).Name + " (";
+
+            foreach (var item in typeof(T).GetProperties())
+            {
+                if (item.GetCustomAttributesData().Count == 0)
+                {
+                    auxList.Add(item.Name);
+
+                    switch (item.PropertyType.Name)
+                    {
+                        case "String":
+                            auxList2.Add(string.Format("'{0}'", item.GetValue(classObj)));
+                            break;
+                        case "DateTime":
+                            auxList2.Add(string.Format("'{0:s}'", item.GetValue(classObj)));
+                            break;
+                        default:
+                            auxList2.Add(item.GetValue(classObj).ToString());
+                            break;
+                    }
+                }
+            }
+
+            sql += string.Join<string>(" ,", auxList) + ") VALUES (";
+            sql += string.Join<string>(" ,", auxList2) + ") ";
+
+            return sqlExecute(sql);
+        }
+
+        public static bool sqlUpdate<T>(T classObj)
+        {
+            List<string> auxList = new List<string>();
+
+            string sql = "Update " + typeof(T).Name + " Set ";
+            string sWHereClause = string.Empty;
+
+            foreach (var item in typeof(T).GetProperties())
+            {
+                if (item.GetCustomAttributesData().Count == 0)
+                {
+                    if (item.Name == "Id")
+                    {
+                        sWHereClause = " Where id = " + item.GetValue(classObj).ToString();
+                    }
+                    else
+                    {
+                        if (item.GetValue(classObj) != null && item.GetValue(classObj).ToString() != "0")
+                        {
+                            switch (item.PropertyType.Name)
+                            {
+                                case "String":
+                                    auxList.Add(string.Format("{0} = '{1}'", item.Name, item.GetValue(classObj)));
+                                    break;
+                                case "DateTime":
+                                    auxList.Add(string.Format("{0} = '{1:s}'", item.Name, item.GetValue(classObj)));
+                                    break;
+                                default:
+                                    auxList.Add(string.Format("{0} = {1}", item.Name, item.GetValue(classObj)));
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            sql += string.Join<string>(" ,", auxList) + sWHereClause;
+
+            return sqlExecute(sql);
+        }
+
+        public static bool sqlDelete<T>(T classObj)
+        {
+            List<string> auxList = new List<string>();
+
+            string sql = "Delete ";
+            sql += "From " + typeof(T).Name;
+
+            foreach (var item in typeof(T).GetProperties())
+            {
+                if (item.GetCustomAttributesData().Count == 0)
+                {
+                    if (item.Name == "Id")
+                    {
+                        sql += " Where id = " + item.GetValue(classObj).ToString();
+                        break;
+                    }
+                }
+            }
+
+            return sqlExecute(sql);
         }
     }
 }
