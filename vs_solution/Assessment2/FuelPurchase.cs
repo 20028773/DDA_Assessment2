@@ -21,12 +21,15 @@ namespace Assessment2
         /// <summary>
         /// MAIN FUEL LIST - GET IT FROM THE FILE
         /// </summary>
-        private static List<FuelPurchase> _fuelList { get { return JsonData.Load<FuelPurchase>(); } }
+        private static List<FuelPurchase> _fuelList { get { return Sql.sqlSelectAll<FuelPurchase>(); } }
         /// <summary>
         /// MAIN FUEL LIST - PUBLIC
         /// </summary>
         [JsonIgnore]
         public static List<FuelPurchase> fuelList { get { return _fuelList; } }
+
+        public FuelPurchase() { }
+
         /// <summary>
         /// RETURN THE VEHICLE FUEL ECONOMY 
         /// </summary>
@@ -44,6 +47,8 @@ namespace Assessment2
                 totalFuel = list.Sum(s => s.quantity);
                 totalKM = list.Max(m => m.odometerReading) - list.Min(m => m.odometerReading);
             }
+            else
+                return 0;
 
             return totalKM / totalFuel;
         }
@@ -84,10 +89,7 @@ namespace Assessment2
                 return sMessage;
             }
 
-            List<FuelPurchase> fList = _fuelList;
-            fList.Add(new FuelPurchase(vehicle.Id, odometer, quantity, price));
-
-            JsonData.Save(fList);
+            Sql.sqlInsert(new FuelPurchase(vehicle.Id, odometer, quantity, price));
 
             return "";
         }
