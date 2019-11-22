@@ -160,8 +160,12 @@ namespace Assessment2
         /// <param name="tankCapacity"></param>
         public static bool AddVehicle(string manufacturer, string model, int makeYear, string registrationNumber, decimal odometerReading, decimal tankCapacity)
         {
-            return Sql.sqlInsert<Vehicle>(new Vehicle(0, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity));
-            //Service.recordService(vId);
+            if (Sql.sqlInsert(new Vehicle(0, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity)))
+            {
+                Service.recordService(vehicleList.LastOrDefault().Id);
+            }
+
+            return true;
         }
         /// <summary>
         /// UPDATE THE VEHICLE'S INFORMATION
@@ -175,7 +179,7 @@ namespace Assessment2
         /// <param name="tankCapacity"></param>
         public static bool EditVehicle(ulong id, string manufacturer, string model, int makeYear, string registrationNumber, decimal odometerReading, decimal tankCapacity)
         {
-            return Sql.sqlUpdate<Vehicle>(new Vehicle(id, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity));
+            return Sql.sqlUpdate(new Vehicle(id, manufacturer, model, makeYear, registrationNumber, odometerReading, tankCapacity));
         }
         /// <summary>
         /// UPDATES THE VEHICLE ODOMETER
@@ -192,7 +196,7 @@ namespace Assessment2
                 return "New Odometer is lower than actual";
             }
 
-            Sql.sqlUpdate<Vehicle>(new Vehicle(vehicleId, newOdometerReading));
+            Sql.sqlUpdate(new Vehicle(vehicleId, newOdometerReading));
 
             return "";
         }
@@ -202,7 +206,7 @@ namespace Assessment2
         /// <param name="v"></param>
         public static void DeleteVehicle(Vehicle v)
         {
-            Sql.sqlDelete<Vehicle>(v);
+            Sql.sqlDelete(v);
         }
 
         /// <summary>

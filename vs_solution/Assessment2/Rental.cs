@@ -121,7 +121,7 @@ namespace Assessment2
         /// <param name="notes"></param>
         public static bool AddRental(ulong vehicleId, string customerName, type rentType, decimal startOdometer, DateTime startDate, DateTime? endDate, string notes)
         {
-            return Sql.sqlInsert<Rental>(new Rental(0, vehicleId, customerName, rentType, startOdometer, 0, startDate, endDate, notes, 0));
+            return Sql.sqlInsert(new Rental(0, vehicleId, customerName, rentType, startOdometer, 0, startDate, endDate, notes, 0));
         }
         /// <summary>
         /// FINALIZE THE RENTAL
@@ -152,7 +152,7 @@ namespace Assessment2
             r.totalPrice = totalPrice;
             r.ModifiedDate = DateTime.Now;
 
-            Sql.sqlUpdate<Rental>(r);
+            Sql.sqlUpdate(r);
 
             return "";
         }
