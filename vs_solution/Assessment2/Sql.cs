@@ -8,17 +8,37 @@ namespace Assessment2
 {
     class Sql
     {
-        const string CONNECTION_STRING = "server=localhost;user=nmt_demo_user;database=nmt_demo;port=3306;password=Password1";
+        const string CONNECTION_STRING = "server=localhost;user=nmt_fleet_manager_user;database=nmt_fleet_manager;port=3306;password=Password1";
 
         private static MySqlConnection connection;
 
-        private static void GetConnection()
+        public static bool TestConnection()
         {
-            connection = new MySqlConnection(CONNECTION_STRING);
-            connection.Open();
+            if (GetConnection())
+            {
+                CloseConnection();
+                return true;
+            }
+
+            return false;
         }
 
-        private void CloseConnection()
+        private static bool GetConnection()
+        {
+            try
+            {
+                connection = new MySqlConnection(CONNECTION_STRING);
+                connection.Open();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void CloseConnection()
         {
             connection.Close();
         }
@@ -29,11 +49,14 @@ namespace Assessment2
 
             try
             {
-                GetConnection();
-
-                using (MySqlDataAdapter da = new MySqlDataAdapter(sql, connection))
+                if (GetConnection())
                 {
-                    da.Fill(dt);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(sql, connection))
+                    {
+                        da.Fill(dt);
+                    }
+
+                    CloseConnection();
                 }
             }
             catch (Exception)
@@ -48,9 +71,16 @@ namespace Assessment2
         {
             try
             {
-                using (MySqlCommand cmdSel = new MySqlCommand(sql, connection))
+
+                if (GetConnection())
                 {
-                    cmdSel.ExecuteNonQuery();
+
+                    using (MySqlCommand cmdSel = new MySqlCommand(sql, connection))
+                    {
+                        cmdSel.ExecuteNonQuery();
+                    }
+
+                    CloseConnection();
                 }
             }
             catch (Exception)
