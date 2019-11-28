@@ -5,7 +5,7 @@ namespace Assessment2
     /// <summary>
     /// INTERACTION LOGIC FOR FORM_FUELPURCHASE.XAML
     /// </summary>
-    public partial class Form_FuelPurchase : Window
+    public partial class Form_FuelPurchase 
     {
         Vehicle vehicle = new Vehicle();
         /// <summary>

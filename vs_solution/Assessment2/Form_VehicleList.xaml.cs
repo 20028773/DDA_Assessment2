@@ -7,7 +7,7 @@ namespace Assessment2
     /// <summary>
     /// INTERACTION LOGIC FOR FORM_VEHICLELIST.XAML
     /// </summary>
-    public partial class Form_VehicleList : Window
+    public partial class Form_VehicleList
     {
         /// <summary>
         /// CONSTRUCTOR

@@ -5,7 +5,7 @@ namespace Assessment2
     /// <summary>
     /// INTERACTION LOGIC FOR VEHICLE.XAML
     /// </summary>
-    public partial class Form_Vehicle : Window
+    public partial class Form_Vehicle 
     {
         private ulong id = 0;
         private string sManufacturer;

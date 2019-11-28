@@ -6,7 +6,7 @@ namespace Assessment2
     /// <summary>
     /// INTERACTION LOGIC FOR FORM_RENTAL.XAML
     /// </summary>
-    public partial class Form_Rental : Window
+    public partial class Form_Rental 
     {
         private ulong vehicleId;
         private ulong rentalId;
@@ -43,8 +43,8 @@ namespace Assessment2
             cbRentType.Text = rental.rentType.ToString();
 
             btnSave.Content = "Finalize Booking";
-            btnSave.Width = 100;
-            btnSave.Margin = new Thickness(70, 0, 0, 0);
+            btnSave.Width = 120;
+            btnSave.Margin = new Thickness(50, 0, 0, 0);
 
             dpStartDate.IsEnabled = false;
             txtEndOdometer.IsEnabled = true;

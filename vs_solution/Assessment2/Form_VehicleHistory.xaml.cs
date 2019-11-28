@@ -6,7 +6,7 @@ namespace Assessment2
     /// <summary>
     /// INTERACTION LOGIC FOR FORM_VEHICLEHISTORY.XAML
     /// </summary>
-    public partial class Form_VehicleHistory : Window
+    public partial class Form_VehicleHistory 
     {
         /// <summary>
         /// CONSTRUCTOR - POPULATE THE VEHICLE INFORMATION AND THE LIST VIEW WITH ALL PREVIOUS ENTRIES

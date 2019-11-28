@@ -6,7 +6,7 @@ namespace Assessment2
     /// <summary>
     /// INTERACTION LOGIC FOR FORM_RENTALLIST.XAML
     /// </summary>
-    public partial class Form_RentalList : Window
+    public partial class Form_RentalList
     {
         /// <summary>
         /// CONSTRUCTOR
@@ -64,6 +64,27 @@ namespace Assessment2
         private void CbFinalized_Unchecked(object sender, RoutedEventArgs e)
         {
             UpdateList();
+        }
+
+        private void DeleteContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvRentalList.SelectedItem != null)
+            {
+                Rental r = (Rental)lvRentalList.SelectedItem;
+
+                if (r.totalPrice > 0)
+                {
+                    MessageBox.Show("You can't delete a finalized rental", "Rental", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+                else
+                {
+                    if (MessageBox.Show("This will erase the Rental from the database, do you still want to continue ?", "Rental", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        Rental.DeleteRental((Rental)lvRentalList.SelectedItem);
+                        UpdateList();
+                    }
+                }
+            }
         }
     }
 }

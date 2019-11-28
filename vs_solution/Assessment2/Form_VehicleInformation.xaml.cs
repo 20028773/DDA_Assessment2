@@ -5,7 +5,7 @@ namespace Assessment2
     /// <summary>
     /// INTERACTION LOGIC FOR FORM_VEHICLEINFORMATION.XAML
     /// </summary>
-    public partial class Form_VehicleInformation : Window
+    public partial class Form_VehicleInformation 
     {
         /// <summary>
         /// CONSTRUCTOR - CALL THE VEHICLE PRINT DETAIL METHOD
