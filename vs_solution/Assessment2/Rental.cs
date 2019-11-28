@@ -123,6 +123,17 @@ namespace Assessment2
         {
             return Sql.sqlInsert(new Rental(0, vehicleId, customerName, rentType, startOdometer, 0, startDate, endDate, notes, 0));
         }
+
+        /// <summary>
+        /// DELETE THE RENTAL
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public static void DeleteRental(Rental r)
+        {
+            Sql.sqlDelete(r);
+        }
+
         /// <summary>
         /// FINALIZE THE RENTAL
         /// </summary>
@@ -161,8 +172,13 @@ namespace Assessment2
         /// </summary>
         /// <param name="vehicheId"></param>
         /// <returns></returns>
-        public static decimal GetTotalRevenue(ulong vehicheId)
-        {            
+        public static decimal GetTotalRevenue(ulong vehicheId = 0)
+        {
+            if (vehicheId == 0)
+            {
+                return rentalList.Sum(t => t.totalPrice);
+            }
+
             return rentalList.Where(x => x.vehicleId == vehicheId).Sum(t => t.totalPrice);
         }
         /// <summary>
