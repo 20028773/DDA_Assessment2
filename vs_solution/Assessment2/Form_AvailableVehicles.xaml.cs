@@ -9,18 +9,27 @@ namespace Assessment2
     /// </summary>
     public partial class Form_AvailableVehicles 
     {
+        /// <summary>
+        /// CONSTRUCTOR
+        /// </summary>
         public Form_AvailableVehicles()
         {
             InitializeComponent();
             UpdateList();
         }
-
+        /// <summary>
+        /// UPDATE THE LIST VIEW ACCORDING TO THE FILTER
+        /// </summary>
         public void UpdateList()
         {
             lvRentVehicleList.ItemsSource = Rental.GetAvailableVehicles(txtFilter.Text);
             lvRentVehicleList.Items.Refresh();
         }
-
+        /// <summary>
+        /// LIST VIEW DOUBLE CLICK EVENT - OPEN THE RENTAL PAGE
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LvRentVehicleList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (lvRentVehicleList.SelectedItem != null)
@@ -31,7 +40,11 @@ namespace Assessment2
                 UpdateList();
             }
         }
-
+        /// <summary>
+        /// ON THE TXT FILTER CHANGE UPDATE THE LISTVIEW
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateList();

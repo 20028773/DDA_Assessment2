@@ -80,13 +80,21 @@ namespace Assessment2
         {
             this.Close();
         }
-
+        /// <summary>
+        /// MENU ITEM ABOUT CLICK EVENT - OPEN THE ABOUT PAGE
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             About about = new About();
             about.ShowDialog();
         }
-
+        /// <summary>
+        /// VEHICE DOUBLE INFORMATION CARD CLICK EVENT - OPEN THE VEHICE PAGE
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void VehicleIC_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (lockDBAccess())
@@ -96,7 +104,11 @@ namespace Assessment2
                 UpdateList();
             }
         }
-
+        /// <summary>
+        /// RENTAL DOUBLE INFORMATION CARD CLICK EVENT - OPEN THE RENTAL PAGE
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RentalIC_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (lockDBAccess())
@@ -106,7 +118,11 @@ namespace Assessment2
                 UpdateList();
             }
         }
-
+        /// <summary>
+        /// AVAILABLE VEHICLE INFORMATION CARD DOUBLE CLICK EVENT - OPEN THE AVAILABLE VEHICLE PAGE
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AvailableVehiclesIC_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (lockDBAccess())
@@ -116,7 +132,10 @@ namespace Assessment2
                 UpdateList();
             }
         }
-
+        /// <summary>
+        /// METHOD CHECK IF THE DATABASE IS AVAILALBE, OTHERWISE WARN THE USER AND DON'T LET HIM OPEN ANY OTHER PAGE
+        /// </summary>
+        /// <returns></returns>
         public bool lockDBAccess()
         {
             if (!bDatabaseStatus)
@@ -126,7 +145,11 @@ namespace Assessment2
             }
             return true;
         }
-
+        /// <summary>
+        /// WINDOW MOUSE MOVE EVENT - UPDATE THE MOUSE POINT TEXT AND THE DATABASE STATUS TEXT
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MetroWindow_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             txtCursorPositionLabel.Text = string.Format("{0}x{1}", e.GetPosition(DashboardWindow).Y, e.GetPosition(DashboardWindow).X);

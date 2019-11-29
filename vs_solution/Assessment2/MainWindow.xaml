@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Assessment2"
         mc:Ignorable="d"
         x:Name="DashboardWindow"
-        Title="MainWindow" Height="450" Width="700" WindowStartupLocation="CenterScreen" MouseMove="MetroWindow_MouseMove" >
+        Title="Dashboard" Height="450" Width="700" WindowStartupLocation="CenterScreen" MouseMove="MetroWindow_MouseMove" >
     <Window.Resources>
         <Style TargetType="ListViewItem" >
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -40,7 +40,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="105" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="70" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -66,8 +66,8 @@
             <Separator Grid.Column="3" />
 
             <StatusBarItem Grid.Column="4">
-                <TextBlock Name="txtFileNameLabel" 
-                           Text="c:\path\of\current\file.txt" />
+                <!--<TextBlock Name="txtFileNameLabel" 
+                           Text="c:\path\of\current\file.txt" />-->
             </StatusBarItem>
 
             <Separator Grid.Column="5" />

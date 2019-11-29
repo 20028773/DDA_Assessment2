@@ -94,7 +94,7 @@
         </TextBlock>
 
         <Label x:Name="lblPackageInfo2" 
-               Content="MySql.Data.MySqlClient .Net Core Class Libraryf" 
+               Content="MySql.Data.MySqlClient .Net Core Class Library" 
                Grid.Column="1" 
                HorizontalAlignment="Left" 
                Margin="0,316,0,0" 

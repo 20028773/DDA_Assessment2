@@ -8,10 +8,16 @@ namespace Assessment2
 {
     class Sql
     {
+        /// <summary>
+        /// DATABASE CONNECTION STRING
+        /// </summary>
         const string CONNECTION_STRING = "server=localhost;user=nmt_fleet_manager_user;database=nmt_fleet_manager;port=3306;password=Password1";
 
         private static MySqlConnection connection;
-
+        /// <summary>
+        /// METHOD TO TEST DATABASE CONNECTION
+        /// </summary>
+        /// <returns></returns>
         public static bool TestConnection()
         {
             if (GetConnection())
@@ -22,7 +28,10 @@ namespace Assessment2
 
             return false;
         }
-
+        /// <summary>
+        /// METHOD TO CONNECT TO THE DATABASE
+        /// </summary>
+        /// <returns></returns>
         private static bool GetConnection()
         {
             try
@@ -37,12 +46,19 @@ namespace Assessment2
 
             return true;
         }
-
+        /// <summary>
+        /// METHOD TO CLOSE THE DATABASE CONNECTION
+        /// </summary>
         private static void CloseConnection()
         {
-            connection.Close();
+            if (connection != null)
+                connection.Close();
         }
-
+        /// <summary>
+        /// METHOD THAT RETURNS THE QUERY INTO A DATATABLE
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         private static DataTable selectTable(string sql)
         {
             DataTable dt = new DataTable();
@@ -66,7 +82,11 @@ namespace Assessment2
 
             return dt;
         }
-
+        /// <summary>
+        /// METHOD THAT EXECUTE THE SQL PASSED AS PARAMETER
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         private static bool sqlExecute(string sql)
         {
             try
@@ -90,7 +110,12 @@ namespace Assessment2
 
             return true;
         }
-
+        /// <summary>
+        /// METHOD CONVERTS DATATABLE INTO A LIST
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         private static List<T> ConvertDataTable<T>(DataTable dt)
         {
             List<T> data = new List<T>();
@@ -103,7 +128,12 @@ namespace Assessment2
 
             return data;
         }
-
+        /// <summary>
+        /// METHOD RETURN A OBJECT FROM A DATA ROW
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dr"></param>
+        /// <returns></returns>
         private static T GetItem<T>(DataRow dr)
         {
             Type temp = typeof(T);
@@ -127,7 +157,13 @@ namespace Assessment2
 
             return obj;
         }
-
+        /// <summary>
+        /// METHOD CREATE DINAMICALLY A SELECT QUERY
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="field"></param>
+        /// <returns></returns>
         public static T sqlSelect<T>(ulong id, string field = "id")
         {
             string sql = "Select * from " + typeof(T).Name;
@@ -135,14 +171,24 @@ namespace Assessment2
 
             return GetItem<T>(selectTable(sql).Rows[0]);
         }
-
+        /// <summary>
+        /// METHOD CREATE DINAMICALLY A SELECT QUERY
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public static List<T> sqlSelectAll<T>(string filter = "")
         {
             string sql = "Select * from " + typeof(T).Name;
 
             return ConvertDataTable<T>(selectTable(sql));
         }
-
+        /// <summary>
+        ///  METHOD CREATE DINAMICALLY A INSERT QUERY
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classObj"></param>
+        /// <returns></returns>
         public static bool sqlInsert<T>(T classObj)
         {
             List<string> auxList = new List<string>();
@@ -180,7 +226,12 @@ namespace Assessment2
 
             return sqlExecute(sql);
         }
-
+        /// <summary>
+        ///  METHOD CREATE DINAMICALLY A UPDATE QUERY
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classObj"></param>
+        /// <returns></returns>
         public static bool sqlUpdate<T>(T classObj)
         {
             List<string> auxList = new List<string>();
@@ -223,7 +274,12 @@ namespace Assessment2
 
             return sqlExecute(sql);
         }
-
+        /// <summary>
+        ///  METHOD CREATE DINAMICALLY A DELETE QUERY
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classObj"></param>
+        /// <returns></returns>
         public static bool sqlDelete<T>(T classObj)
         {
             List<string> auxList = new List<string>();
